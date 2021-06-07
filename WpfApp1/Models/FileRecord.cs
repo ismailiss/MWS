@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 namespace WpfApp1.Models
 {
-    public class Input
+    public class FileRecord
     {
-        public decimal Alias { get; set; }
+        public string name{ get;set; }
 
-        public uint Codice { get; set; }
+        public string ToFormatFlatFile()
+        {
+            return name+' ';
+        }
     }
 }

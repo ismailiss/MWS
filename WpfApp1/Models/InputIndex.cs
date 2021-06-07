@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace WpfApp1.Models
 {
-    public class Input
+    class InputIndex
     {
-        public decimal Alias { get; set; }
+        public int AliasIndex { get; set; }
 
-        public uint Codice { get; set; }
+        public int CodiceIndex { get; set; }
     }
 }

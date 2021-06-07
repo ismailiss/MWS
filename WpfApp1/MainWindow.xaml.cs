@@ -1,6 +1,9 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +16,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml;
 using System.Xml.Linq;
+using WpfApp1.Models;
+using WpfApp1.Services;
 
 namespace WpfApp1
 {
@@ -38,28 +44,25 @@ namespace WpfApp1
 ;
 
 
-                // Display OpenFileDialog by calling ShowDialog method 
-                Nullable<bool> result = openFileDialog.ShowDialog();
+            // Display OpenFileDialog by calling ShowDialog method 
+            Nullable<bool> result = openFileDialog.ShowDialog();
 
 
-                // Get the selected file name and display in a TextBox 
-                if (result == true)
-                {
-                int aliasIndex=0;
+            // Get the selected file name and display in a TextBox 
+            if (result == true)
+            {
+                int aliasIndex = 0;
                 int odiceIndex = 0;
 
                 // Open document 
                 string filename = openFileDialog.FileName;
-                XDocument xmlDoc = XDocument.Load(filename);
-                XNamespace ss = "urn:schemas-microsoft-com:office:spreadsheet";
-                 xmlDoc.Descendants().Where(p => p.Name.LocalName == "Row")
-                         .ToList()
-                         .ForEach(e => Console.WriteLine(e)).FirstOrddefaukt; ;
-                var res = result.Value;
-               /* var rows = XDocument.Root.Element(ss + "Worksheet")
-  .Element(ss + "Table").Elements(ss + "Row");*/
-                var worksheet = xmlDoc.Descendants("Worksheet") ;
-                }
+                //Create dataSet
+                DataSet ds= XMLtoDataTable.ImportExcelXML(filename, true, true);
+
+                //create Input object
+                 IList<Input> inputs = DataTableToDataExport.DataTableToInput(ds);
+
+            }
 
         }
     }
