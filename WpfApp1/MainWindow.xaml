@@ -5,9 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
-        Title="My MWS app" Height="450" Width="800">
-    <Grid>
-        <Button x:Name="btnUploadInput" Content="Upload File" HorizontalAlignment="Left" Margin="49,134,0,0" VerticalAlignment="Top" Height="58" Width="123" FontSize="16" FontWeight="Bold" Click="btnUploadInput_Click"/>
+        Title="My MWS app" Height="300" Width="400">
+    <Grid Background="{DynamicResource {x:Static SystemColors.GradientActiveCaptionBrushKey}}">
+
+        <Button x:Name="btnUploadInput" Content="Upload File" HorizontalAlignment="Center" VerticalAlignment="Top" Height="36" Width="250" FontSize="16" FontWeight="Bold" Click="btnUploadInput_Click" MinWidth="3" Margin="0,10,10,0"/>
+        <Grid x:Name="Add" HorizontalAlignment="Center"  Width="332" Visibility="Visible" Margin="0,80,0,140">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80*"/>
+                <ColumnDefinition Width="40*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="EmailInput" HorizontalAlignment="Left" Text="Email" TextWrapping="Wrap" Width="202" FontSize="16" Margin="0,-1,0,3" BorderThickness="1,1,1,1" ClipToBounds="True" Height="25"/>
+            <Button x:Name="AddEmail" Content="Add Email" Margin="4,-1,0,3" Grid.Column="3" Height="25"/>
+        </Grid>
+        <Button x:Name="Generer" Content="Generate" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="250" Height="36" Margin="0,0,10,36" FontWeight="Bold" FontSize="16"/>
 
     </Grid>
 </Window>
