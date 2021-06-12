@@ -10,30 +10,41 @@ namespace WpfApp1.Models
     {
         public string SKU { get; set; }
 
-        public ulong productId { get; set; } = 0;
+        public decimal ProductId { get; set; } = 0;
 
-        public int productIdType { get; set; } = 0;
+        public int ProductIdType { get; set; } = 0;
 
-        public decimal price { get; set; } = 0;
+        public decimal Price { get; set; } = 0;
 
-        public string minSellerAllowedPrice { get; set; } = "EUR";
+        public string MinSellerAllowedPrice { get; set; } = "EUR";
 
-        public string maxSellerAllowedPrice { get; set; } = "Down";
+        public string MaxSellerAllowedPrice { get; set; } = "Down";
 
-        public int itemCondition { get; set; } = 11;
+        public int ItemCondition { get; set; } = 11;
 
-        public int quantity { get; set; } = 0;
+        public int Quantity { get; set; } = 0;
 
-        public string addDelete{ get;set; } = "a";
+        public string AddDelete{ get;set; } = "a";
 
         public string ItemNote { get; set; } = "a";
 
+        public string ExpeditedShipping { get; set; } = "";
+
+        public string Product_tax_code { get; set; } = "";
+
+        public int HandlingTime { get; set; } = 2;
+
+        // public string willShipInternationally { get; set; } = "";
 
         public string ToFormatFlatFile()
         {
-            return SKU + "\t"+ minSellerAllowedPrice
-                 + "\t" + maxSellerAllowedPrice + "\t" + countryCode
-                  + "\t" + ruleName + "\t" + ruleAction + "\t" + businessRuleName + "\n";
+            return SKU + "\t"+ ProductId
+                 + "\t" + ProductIdType + "\t" + Price.ToString("0.##")
+            + "\t" + MinSellerAllowedPrice + "\t" + MaxSellerAllowedPrice + 
+                  "\t" + ItemCondition + "\t" + Quantity + "\t" +
+                  AddDelete + "\t" + ItemNote + "\t" +
+                  "\t" + ExpeditedShipping + "\t" + Product_tax_code + "\t" +
+                  +HandlingTime + "\t";
         }
     }
 }

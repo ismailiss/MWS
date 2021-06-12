@@ -12,7 +12,6 @@ namespace WpfApp1.Services
         public static void add()
         {
             List<FileRecordPricing> records = new List<FileRecordPricing>();
-            records.Add(new FileRecordPricing { name = "12345" });
         }
 
 

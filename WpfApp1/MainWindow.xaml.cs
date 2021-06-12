@@ -61,6 +61,47 @@ namespace WpfApp1
 
                 //create Input object
                  IList<Input> inputs = DataTableToDataExport.DataTableToInput(ds);
+                IList<FileRecordInventory> fileRecordsInventory = new List<FileRecordInventory>();
+                IList<FileRecordPricing> fileRecordsPricing = new List<FileRecordPricing>();
+
+                foreach (var input in inputs)
+                {
+                    FileRecordPricing frp = new FileRecordPricing();
+                    FileRecordInventory fri = new FileRecordInventory();
+                    fri.ProductId = input.Alias;
+                    fileRecordsPricing.Add(frp);
+                    fileRecordsInventory.Add(fri);
+                }
+                string fileNameInventoryLoader = @"C:\Flat.File.InventoryLoader.txt";
+                string fileNameAutomatePricing = @"C:\Flat.File.AutomatePricing.txt";
+                if (File.Exists(fileNameInventoryLoader))
+                {
+                    File.Delete(fileNameInventoryLoader);
+                }
+                //Pass the filepath and filename to the StreamWriter Constructor
+                StreamWriter swInventoryLoader = new StreamWriter(fileNameInventoryLoader);
+                //Write a line of text
+                swInventoryLoader.WriteLine("sku	product-id	product-id-type	price	minimum-seller-allowed-price	maximum-seller-allowed-price	item-condition	quantity	add-delete	item-note	expedited-shipping  product_tax_code    handling-time");
+                //Close the file
+                foreach (var record in fileRecordsInventory)
+                    swInventoryLoader.WriteLine(record.ToFormatFlatFile());
+                swInventoryLoader.Close();
+
+                if (File.Exists(fileNameAutomatePricing))
+                {
+                    File.Delete(fileNameAutomatePricing);
+                }
+                //Pass the filepath and filename to the StreamWriter Constructor
+                StreamWriter swPricing = new StreamWriter(fileNameAutomatePricing);
+                //Write a line of text
+                swPricing.WriteLine("sku	minimum-seller-allowed-price	maximum-seller-allowed-price	country-code	currency-code	rule-name	rule-action	business-rule-name	business-rule-action");
+                //Close the file
+                foreach (var record in fileRecordsPricing)
+                    swPricing.WriteLine(record.ToFormatFlatFile());
+                swPricing.Close();
+
+
+
 
             }
 

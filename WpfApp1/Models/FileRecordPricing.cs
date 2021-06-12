@@ -10,27 +10,29 @@ namespace WpfApp1.Models
     {
         public string SKU { get; set; }
 
-        public int minSellerAllowedPrice { get; set; } = 0;
+        public decimal MinSellerAllowedPrice { get; set; } = 0;
 
-        public int maxSellerAllowedPrice { get; set; } = 0;
+        public decimal MaxSellerAllowedPrice { get; set; } = 0;
 
-        public string countryCode { get; set; } = "IT";
+        public string CountryCode { get; set; } = "IT";
 
-        public string currencyCode { get; set; } = "EUR";
+        public string CurrencyCode { get; set; } = "EUR";
 
-        public string ruleName { get; set; } = "Down";
+        public string RuleName { get; set; } = "Down";
 
-        public string ruleAction { get; set; } = "Down-Business";
+        public string RuleAction { get; set; } = "START";
 
-        public string businessRuleName { get; set; } = "START";
+        public string BusinessRuleName { get; set; } = "Down-Business";
 
-        public string name{ get;set; }
+        public string BusinessRuleAction { get; set; } = "START";
+
 
         public string ToFormatFlatFile()
         {
-            return SKU + "\t"+ minSellerAllowedPrice
-                 + "\t" + maxSellerAllowedPrice + "\t" + countryCode
-                  + "\t" + ruleName + "\t" + ruleAction + "\t" + businessRuleName + "\n";
+            return SKU + "\t"+ MinSellerAllowedPrice
+                 + "\t" + MaxSellerAllowedPrice + "\t" + CountryCode + "\t" + CurrencyCode
+                  + "\t" + RuleName + "\t" + RuleAction + "\t" + BusinessRuleName + 
+                  "\t" + BusinessRuleAction;
         }
     }
 }
