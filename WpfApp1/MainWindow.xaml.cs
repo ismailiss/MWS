@@ -18,10 +18,11 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml;
 using System.Xml.Linq;
-using WpfApp1.Models;
-using WpfApp1.Services;
+using MWSAPP.Models;
+using MWSAPP.Services;
+using System.ComponentModel;
 
-namespace WpfApp1
+namespace MWSAPP
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -35,13 +36,18 @@ namespace WpfApp1
 
         private void btnUploadInput_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+
+     
+            //display message 
+            TextProgressBar.Text = "start";
             // Create OpenFileDialog 
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
             // Set filter for file extension and default file extension 
             openFileDialog.DefaultExt = ".xml";
-            openFileDialog.Filter = "xml Files|*.xml"
-;
+            openFileDialog.Filter = "xml Files|*.xml";
 
 
             // Display OpenFileDialog by calling ShowDialog method 
@@ -51,18 +57,22 @@ namespace WpfApp1
             // Get the selected file name and display in a TextBox 
             if (result == true)
             {
-                int aliasIndex = 0;
-                int odiceIndex = 0;
+                TextProgressBar.Text = "Open Document ";
+                myProgressBar.Visibility = Visibility.Visible;
+                TextProgressBar.Visibility = Visibility.Visible;
 
-                // Open document 
-                string filename = openFileDialog.FileName;
+                    // Open document 
+                    string filename = openFileDialog.FileName;
                 //Create dataSet
-                DataSet ds= XMLtoDataTable.ImportExcelXML(filename, true, true);
+                TextProgressBar.Text = "Read DATA";
+
+                DataSet ds = XMLtoDataTable.ImportExcelXML(filename, true, true);
 
                 //create Input object
                  IList<Input> inputs = DataTableToDataExport.DataTableToInput(ds);
                 IList<FileRecordInventory> fileRecordsInventory = new List<FileRecordInventory>();
                 IList<FileRecordPricing> fileRecordsPricing = new List<FileRecordPricing>();
+                TextProgressBar.Text = "Create Records";
 
                 foreach (var input in inputs)
                 {
@@ -72,8 +82,11 @@ namespace WpfApp1
                     fileRecordsPricing.Add(frp);
                     fileRecordsInventory.Add(fri);
                 }
-                string fileNameInventoryLoader = @"C:\Flat.File.InventoryLoader.txt";
-                string fileNameAutomatePricing = @"C:\Flat.File.AutomatePricing.txt";
+                string path = Directory.GetCurrentDirectory();
+                TextProgressBar.Text = "Create Flat Files";
+
+                string fileNameInventoryLoader = @"Flat.File.InventoryLoader.txt";
+                string fileNameAutomatePricing = @"Flat.File.AutomatePricing.txt";
                 if (File.Exists(fileNameInventoryLoader))
                 {
                     File.Delete(fileNameInventoryLoader);
@@ -91,8 +104,8 @@ namespace WpfApp1
                 {
                     File.Delete(fileNameAutomatePricing);
                 }
-                //Pass the filepath and filename to the StreamWriter Constructor
-                StreamWriter swPricing = new StreamWriter(fileNameAutomatePricing);
+                    //Pass the filepath and filename to the StreamWriter Constructor
+                    StreamWriter swPricing = new StreamWriter(fileNameAutomatePricing);
                 //Write a line of text
                 swPricing.WriteLine("sku	minimum-seller-allowed-price	maximum-seller-allowed-price	country-code	currency-code	rule-name	rule-action	business-rule-name	business-rule-action");
                 //Close the file
@@ -100,10 +113,23 @@ namespace WpfApp1
                     swPricing.WriteLine(record.ToFormatFlatFile());
                 swPricing.Close();
 
-
-
+                TextProgressBar.Text = "Successed";
 
             }
+            }
+            catch (Exception ex)
+            {
+                TextErrorProgressBar.Visibility = Visibility.Visible;
+                TextProgressBar.Text = "Failed";
+                TextErrorProgressBar.Text = ex.Message;
+
+            }
+
+        }
+
+    
+        private void ProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
 
         }
     }

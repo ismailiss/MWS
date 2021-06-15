@@ -6,6 +6,8 @@
     <UseWPF>true</UseWPF>
     <ApplicationIcon />
     <StartupObject />
+    <AssemblyName>MWSAPP</AssemblyName>
+    <RootNamespace>MWSAPP</RootNamespace>
   </PropertyGroup>
 
 </Project>

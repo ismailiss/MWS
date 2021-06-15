@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace WpfApp1.Services
+namespace MWSAPP.Services
 {
     public static class XMLtoDataTable
     {

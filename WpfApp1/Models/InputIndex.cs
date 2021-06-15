@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WpfApp1.Models
+namespace MWSAPP.Models
 {
     class InputIndex
     {
@@ -13,3 +13,4 @@ namespace WpfApp1.Models
         public int CodiceIndex { get; set; }
     }
 }
+  

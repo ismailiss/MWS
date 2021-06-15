@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
-using WpfApp1.Models;
+using MWSAPP.Models;
 
-namespace WpfApp1.Services
+namespace MWSAPP.Services
 {
     public static class DataTableToDataExport
     {

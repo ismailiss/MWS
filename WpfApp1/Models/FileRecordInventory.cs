@@ -4,17 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WpfApp1.Models
+namespace MWSAPP.Models
 {
     public class FileRecordInventory
     {
         public string SKU { get; set; }
 
-        public decimal ProductId { get; set; } = 0;
+        public decimal? ProductId { get; set; } 
 
-        public int ProductIdType { get; set; } = 0;
+        public int? ProductIdType { get; set; }
 
-        public decimal Price { get; set; } = 0;
+        public decimal? Price { get; set; }
+
 
         public string MinSellerAllowedPrice { get; set; } = "EUR";
 
@@ -38,13 +39,15 @@ namespace WpfApp1.Models
 
         public string ToFormatFlatFile()
         {
-            return SKU + "\t"+ ProductId
-                 + "\t" + ProductIdType + "\t" + Price.ToString("0.##")
-            + "\t" + MinSellerAllowedPrice + "\t" + MaxSellerAllowedPrice + 
-                  "\t" + ItemCondition + "\t" + Quantity + "\t" +
-                  AddDelete + "\t" + ItemNote + "\t" +
-                  "\t" + ExpeditedShipping + "\t" + Product_tax_code + "\t" +
-                  +HandlingTime + "\t";
+            string priceString = Price.HasValue ? Price.Value.ToString("0,##") : "";
+        
+            string format = $"{SKU }\t{ProductId}{ProductIdType}\t {priceString}" +
+                            $"\t{MinSellerAllowedPrice }\t{MaxSellerAllowedPrice}\t{ItemCondition}\t" +
+                            $"{Quantity}\t{AddDelete }\t{ItemNote }\t{ExpeditedShipping }\t{Product_tax_code }" +
+                            $"\t{ HandlingTime }";
+            return format;
+
+
         }
     }
 }

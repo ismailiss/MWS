@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WpfApp1.Models
+namespace MWSAPP.Models
 {
     public class FileRecordPricing
     {
         public string SKU { get; set; }
 
-        public decimal MinSellerAllowedPrice { get; set; } = 0;
+        public decimal? MinSellerAllowedPrice { get; set; } 
 
-        public decimal MaxSellerAllowedPrice { get; set; } = 0;
+        public decimal? MaxSellerAllowedPrice { get; set; } 
 
         public string CountryCode { get; set; } = "IT";
 
