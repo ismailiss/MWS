@@ -11,7 +11,7 @@ namespace MWSAPP.Services
 {
     public static class XMLtoDataTable
     {
-        private static ColumnType getDefaultType()
+        private static ColumnType GetDefaultType()
         {
             return new ColumnType(typeof(String));
         }
@@ -73,27 +73,27 @@ namespace MWSAPP.Services
 
         public static DataSet ImportExcelXML(string fileName, bool hasHeaders, bool autoDetectColumnType)
         {
-            StreamReader sr = new StreamReader(fileName);
+            StreamReader sr = new(fileName);
             Stream st = (Stream)sr.BaseStream;
             return ImportExcelXML(st, hasHeaders, autoDetectColumnType);
         }
 
         private static DataSet ImportExcelXML(Stream inputFileStream, bool hasHeaders, bool autoDetectColumnType)
         {
-            XmlDocument doc = new XmlDocument();
+            XmlDocument doc = new();
             doc.Load(new XmlTextReader(inputFileStream));
-            XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.NameTable);
+            XmlNamespaceManager nsmgr = new(doc.NameTable);
 
             nsmgr.AddNamespace("o", "urn:schemas-microsoft-com:office:office");
             nsmgr.AddNamespace("x", "urn:schemas-microsoft-com:office:excel");
             nsmgr.AddNamespace("ss", "urn:schemas-microsoft-com:office:spreadsheet");
 
-            DataSet ds = new DataSet();
+            DataSet ds = new();
 
             foreach (XmlNode node in
               doc.DocumentElement.SelectNodes("//ss:Worksheet", nsmgr))
             {
-                DataTable dt = new DataTable(node.Attributes["ss:Name"].Value);
+                DataTable dt = new(node.Attributes["ss:Name"].Value);
                 ds.Tables.Add(dt);
                 XmlNodeList rows = node.SelectNodes("ss:Table/ss:Row", nsmgr);
                 if (rows.Count > 0)
@@ -102,7 +102,7 @@ namespace MWSAPP.Services
                     //*************************
                     //Add Columns To Table from header row
                     //*************************
-                    List<ColumnType> columns = new List<ColumnType>();
+                    List<ColumnType> columns = new();
                     int startIndex = 0;
                     if (hasHeaders)
                     {
@@ -165,7 +165,7 @@ namespace MWSAPP.Services
                             {
                                 for (int ii = dt.Columns.Count; ii < actualCellIndex; ii++)
                                 {
-                                    dt.Columns.Add("Column" + actualCellIndex.ToString(), typeof(string)); columns.Add(getDefaultType());
+                                    dt.Columns.Add("Column" + actualCellIndex.ToString(), typeof(string)); columns.Add(GetDefaultType());
                                 } // ii
                                 ColumnType autoDetectType =
                                    getType(cell.SelectSingleNode("ss:Data", nsmgr));

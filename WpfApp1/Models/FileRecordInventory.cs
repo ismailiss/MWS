@@ -43,7 +43,7 @@ namespace MWSAPP.Models
         
             string format = $"{SKU }\t{ProductId}{ProductIdType}\t {priceString}" +
                             $"\t{MinSellerAllowedPrice }\t{MaxSellerAllowedPrice}\t{ItemCondition}\t" +
-                            $"{Quantity}\t{AddDelete }\t{ItemNote }\t{ExpeditedShipping }\t{Product_tax_code }" +
+                            $"{Quantity}\t{AddDelete }\t{ItemNote }\t{ExpeditedShipping }\t{Product_tax_code}" +
                             $"\t{ HandlingTime }";
             return format;
 

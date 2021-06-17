@@ -5,22 +5,45 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
-        Title="My MWS app" Height="360" Width="400">
-    <Grid x:Name="ProgressBar" Background="{DynamicResource {x:Static SystemColors.GradientActiveCaptionBrushKey}}" Margin="0,0,0,0"  Width="400">
+        Title="My MWS app" Height="500" Width="400">
 
-        <Button x:Name="btnUploadInput" Content="Upload File" HorizontalAlignment="Center" VerticalAlignment="Top" Height="36" Width="250" FontSize="16" FontWeight="Bold" Click="btnUploadInput_Click" MinWidth="3" Margin="0,10,10,0"/>
-        <Grid x:Name="Add" HorizontalAlignment="Center"  Width="332" Visibility="Visible" Margin="0,80,0,140">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80*"/>
-                <ColumnDefinition Width="40*"/>
-            </Grid.ColumnDefinitions>
-            <TextBox x:Name="EmailInput" HorizontalAlignment="Left" Text="Email" TextWrapping="Wrap" Width="202" FontSize="16" Margin="0,-1,0,3" BorderThickness="1,1,1,1" ClipToBounds="True" Height="25"/>
-            <Button x:Name="AddEmail" Content="Add Email" Margin="4,-1,0,3" Grid.Column="3" Height="25"/>
-        </Grid>
-        <Button x:Name="Generer" Content="Send to email" HorizontalAlignment="Center" VerticalAlignment="Top" Width="240" Height="32" FontWeight="Bold" FontSize="16" Margin="0,192,0,0"/>
-        <ProgressBar HorizontalAlignment="Left" IsIndeterminate="True" x:Name="myProgressBar" Height="7" Margin="107,242,0,0" VerticalAlignment="Top" Width="213" ValueChanged="ProgressBar_ValueChanged" Visibility="Hidden"/>
-        <TextBlock x:Name="TextProgressBar" HorizontalAlignment="Left" Margin="70,266,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" TextAlignment="Center" Height="16" Visibility="Hidden"><Run Text="message"/><LineBreak/><Run/></TextBlock>
-        <TextBlock  x:Name="TextErrorProgressBar"  HorizontalAlignment="Left" Margin="70,290,0,0" Text="error" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Height="16" TextAlignment="Center" Foreground="#FFFF1313" Visibility="Hidden"/>
+    <Grid x:Name="ProgressBar" Background="{DynamicResource {x:Static SystemColors.GradientActiveCaptionBrushKey}}" Margin="0,0,0,0"  Width="400">
+        <TabControl x:Name="TabControl1" TabStripPlacement="Top" Margin="0,0,0,162">
+            <TabItem Header="Upload" IsEnabled="False">
+                <Button x:Name="btnUploadInput" Content="Upload File" HorizontalAlignment="Center" VerticalAlignment="Top" Height="36" Width="250" FontSize="16" FontWeight="Bold" Click="btnUploadInput_Click" MinWidth="3" Margin="0,10,10,0"/>
+            </TabItem>
+            <TabItem Header="Generate"  IsEnabled="False">
+                <Grid HorizontalAlignment="Left" Margin="53,0,0,0" VerticalAlignment="Top" Height="212">
+                    <Button x:Name="UploadInventory" Content="Upload Inventory File" Click="UploadInventory_Click" Width="231" Padding="0,1,1,1" Height="40" HorizontalAlignment="Center" Margin="0,1,0,55" IsCancel="True"/>
+                    <Button x:Name="Generate" Content="Generate" HorizontalAlignment="Center" VerticalAlignment="Center" Width="240" Height="32" FontWeight="Bold" FontSize="16" Margin="0,82,0,0"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Email"  IsEnabled="False">
+                <Grid RenderTransformOrigin="0.777,0.152">
+
+                    <TextBox x:Name="EmailInput" Text="Email@gmail.com" TextWrapping="Wrap" Width="160" FontSize="16" BorderThickness="1,1,1,1" ClipToBounds="True" Margin="23,29,0,226" HorizontalAlignment="Left" Height="40" />
+                    <Button x:Name="AddEmail" Content="Add Email" Click="AddEmail_Click" RenderTransformOrigin="-0.571,8.321" Margin="194,27,105,226" Width="90" Height="40" />
+                    <Button x:Name="DeleteEmail" Content="Delete Email" Click="DeleteEmail_Click" Margin="294,29,10,226" Width="90" Height="40" />
+                    <ListView x:Name="ListViewEmails" Width="300" Margin="44,117,50,11">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Email" Width="300" 
+                        DisplayMemberBinding="{Binding Email, Mode=TwoWay}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+
+        <ProgressBar HorizontalAlignment="Center" IsIndeterminate="True" x:Name="myProgressBar" Height="7" Margin="0,366,0,0" VerticalAlignment="Top" Width="213" ValueChanged="ProgressBar_ValueChanged" Visibility="Visible"/>
+        <TextBlock x:Name="TextProgressBar" HorizontalAlignment="Center" Margin="0,386,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" TextAlignment="Center" Height="16" Visibility="Visible"><Run Text="message"/><LineBreak/><Run/></TextBlock>
+        <TextBlock  x:Name="TextErrorProgressBar"  HorizontalAlignment="Center" Margin="2,410,0,0" Text="error" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Height="16" TextAlignment="Center" Foreground="#FFFF1313" Visibility="Visible"/>
+        <Button x:Name="Next" Content="Next&gt;&gt;" HorizontalAlignment="Left" Margin="160,330,0,0" VerticalAlignment="Top" Width="80" Height="25" Click="Next_Click"/>
+        <Button x:Name="Precedent" Content="&lt;&lt;Precedent " HorizontalAlignment="Left" Margin="60,330,0,0" VerticalAlignment="Top" Width="80" Height="25" Click="Precedent_Click"/>
+        <Button Content="Button" HorizontalAlignment="Left" Margin="259,330,0,0" VerticalAlignment="Top" Width="80" Height="25"/>
+
 
     </Grid>
 </Window>

@@ -15,7 +15,7 @@ namespace MWSAPP.Services
     {
         private static InputIndex getInputIndex(DataColumnCollection Columns)
         {
-            InputIndex inputIndex = new InputIndex();
+            InputIndex inputIndex = new();
             var indiceAlias = Columns.Cast<DataColumn>().
               Select((c,i) => new { c.ColumnName,i }).Where(c => c.ColumnName == "Alias").FirstOrDefault();
            inputIndex.AliasIndex = indiceAlias.i;
