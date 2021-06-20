@@ -9,13 +9,17 @@
 
     <Grid x:Name="ProgressBar" Background="{DynamicResource {x:Static SystemColors.GradientActiveCaptionBrushKey}}" Margin="0,0,0,0"  Width="400">
         <TabControl x:Name="TabControl1" TabStripPlacement="Top" Margin="0,0,0,162">
-            <TabItem Header="Upload" IsEnabled="False">
-                <Button x:Name="btnUploadInput" Content="Upload File" HorizontalAlignment="Center" VerticalAlignment="Top" Height="36" Width="250" FontSize="16" FontWeight="Bold" Click="btnUploadInput_Click" MinWidth="3" Margin="0,10,10,0"/>
+            <TabItem Header="Upload" IsEnabled="False" HorizontalAlignment="Left" Margin="-2,-2,0,0" Width="54">
+                <Button x:Name="btnUploadInput" Content="Upload File" HorizontalAlignment="Center" VerticalAlignment="Top" Height="36" Width="250" FontSize="16" FontWeight="Bold" Click="btnUploadInput_Click" MinWidth="4" Margin="0,30,0,0" VerticalContentAlignment="Center"/>
             </TabItem>
             <TabItem Header="Generate"  IsEnabled="False">
-                <Grid HorizontalAlignment="Left" Margin="53,0,0,0" VerticalAlignment="Top" Height="212">
-                    <Button x:Name="UploadInventory" Content="Upload Inventory File" Click="UploadInventory_Click" Width="231" Padding="0,1,1,1" Height="40" HorizontalAlignment="Center" Margin="0,1,0,55" IsCancel="True"/>
-                    <Button x:Name="Generate" Content="Generate" HorizontalAlignment="Center" VerticalAlignment="Center" Width="240" Height="32" FontWeight="Bold" FontSize="16" Margin="0,82,0,0"/>
+                <Grid HorizontalAlignment="Center" VerticalAlignment="Top" Height="300" Width="394">
+                    <Button x:Name="UploadInventory" Content="Upload Inventory File" Click="UploadInventory_Click" Width="250" Padding="0,1,1,1" HorizontalAlignment="Center" Margin="0,45,0,216" IsCancel="True" FontWeight="Bold" FontSize="16" Height="36"/>
+                    <Button x:Name="Generate" Content="Generate" HorizontalAlignment="Center" Width="250" FontWeight="Bold" FontSize="16" Margin="0,172,0,8" Click="Generate_Click" Height="38"/>
+                    <TextBox x:Name="TVAValue" PreviewTextInput="PreviewTextInput" HorizontalAlignment="Left" Margin="70,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="130" Height="30" TextChanged="TVAValue_TextChanged"/>
+                    <TextBox x:Name="AmazonComissionValue" PreviewTextInput="PreviewTextInput" HorizontalAlignment="Left" Margin="250,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="130" Height="30"/>
+                    <Label x:Name="TVALabel" Content="TVA&#xD;&#xA;" HorizontalAlignment="Left" Margin="70,100,0,0" VerticalAlignment="Top" Width="130" Height="30" FontWeight="Bold"/>
+                    <Label x:Name="AmazonComissionLabel" Content="Amazon Comission" HorizontalAlignment="Left" Margin="250,100,0,0" VerticalAlignment="Top" Width="130" Height="30" FontWeight="Bold"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Email"  IsEnabled="False">

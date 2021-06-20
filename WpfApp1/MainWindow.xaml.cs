@@ -21,6 +21,7 @@ using System.Xml.Linq;
 using MWSAPP.Models;
 using MWSAPP.Services;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
 
 namespace MWSAPP
 {
@@ -53,30 +54,30 @@ namespace MWSAPP
             Nullable<bool> result = openFileDialog.ShowDialog();
 
 
-            // Get the selected file name and display in a TextBox 
-            if (result == true)
-            {
-                TextProgressBar.Text = "Open Document ";
-                myProgressBar.Visibility = Visibility.Visible;
-                TextProgressBar.Visibility = Visibility.Visible;
+                // Get the selected file name and display in a TextBox 
+                if (result == true)
+                {
+                    TextProgressBar.Text = "Open Document ";
+                    myProgressBar.Visibility = Visibility.Visible;
+                    TextProgressBar.Visibility = Visibility.Visible;
 
                     // Open document 
                     string filename = openFileDialog.FileName;
-                //Create dataSet
-                TextProgressBar.Text = "Read DATA";
+                    //Create dataSet
+                    TextProgressBar.Text = "Read DATA";
 
-                DataSet ds = XMLtoDataTable.ImportExcelXML(filename, true, true);
+                    DataSet ds = XMLtoDataTable.ImportExcelXML(filename, true, true);
                     //   DataSet dsClonce = ds;
-                     DataTable dt = ds.Tables[0];
+                    DataTable dt = ds.Tables[0];
                     dt.Columns.Add("SKU", typeof(string));
                     dt.Columns.Add("Quantity", typeof(int));
                     int rowsCount = dt.Rows.Count;
                     for (int i = 0; i < rowsCount; i++)
                     {
 
-                        dt.Rows[i]["SKU"] = FormatString.FormatSKU(dt.Rows[i],"FOR"); ;
-                        dt.Rows[i]["Quantity"] =dt.Rows[i]["COPRE"];
-                       if (int.Parse(dt.Rows[i]["SITEA"].ToString()) > 0)
+                        dt.Rows[i]["SKU"] = FormatString.FormatSKU(dt.Rows[i], "FOR"); ;
+                        dt.Rows[i]["Quantity"] = dt.Rows[i]["COPRE"];
+                        if (int.Parse(dt.Rows[i]["SITEA"].ToString()) > 0)
                         {
                             string skuSITEA = FormatString.FormatSKU(dt.Rows[i], "SITEA"); ;
 
@@ -92,56 +93,7 @@ namespace MWSAPP
                         }
 
                     }
-                    ExcelLibrary.DataSetHelper.CreateWorkbook(@"MyExcelFile"+ DateTime.Now.ToString("MM-dd-yyyy-HH-mm") + ".xls", ds);
-
-
-                        //create Input object
-                          IList<Input> inputs = DataTableToDataExport.DataTableToInput(ds);
-                         IList<FileRecordInventory> fileRecordsInventory = new List<FileRecordInventory>();
-                         IList<FileRecordPricing> fileRecordsPricing = new List<FileRecordPricing>();
-                         TextProgressBar.Text = "Create Records";
-
-                         foreach (var input in inputs)
-                         {
-                             FileRecordPricing frp = new FileRecordPricing();
-                             FileRecordInventory fri = new FileRecordInventory();
-                             fri.ProductId = input.Alias;
-                             fileRecordsPricing.Add(frp);
-                             fileRecordsInventory.Add(fri);
-                         }
-                         string path = Directory.GetCurrentDirectory();
-                         TextProgressBar.Text = "Create Flat Files";
-
-                         string fileNameInventoryLoader = @"Flat.File.InventoryLoader.txt";
-                         string fileNameAutomatePricing = @"Flat.File.AutomatePricing.txt";
-                         if (File.Exists(fileNameInventoryLoader))
-                         {
-                             File.Delete(fileNameInventoryLoader);
-                         }
-                         //Pass the filepath and filename to the StreamWriter Constructor
-                         StreamWriter swInventoryLoader = new StreamWriter(fileNameInventoryLoader);
-                         //Write a line of text
-                         swInventoryLoader.WriteLine("sku	product-id	product-id-type	price	minimum-seller-allowed-price	maximum-seller-allowed-price	item-condition	quantity	add-delete	item-note	expedited-shipping  product_tax_code    handling-time");
-                         //Close the file
-                         foreach (var record in fileRecordsInventory)
-                             swInventoryLoader.WriteLine(record.ToFormatFlatFile());
-                         swInventoryLoader.Close();
-
-                         if (File.Exists(fileNameAutomatePricing))
-                         {
-                             File.Delete(fileNameAutomatePricing);
-                         }
-                             //Pass the filepath and filename to the StreamWriter Constructor
-                             StreamWriter swPricing = new StreamWriter(fileNameAutomatePricing);
-                         //Write a line of text
-                         swPricing.WriteLine("sku	minimum-seller-allowed-price	maximum-seller-allowed-price	country-code	currency-code	rule-name	rule-action	business-rule-name	business-rule-action");
-                         //Close the file
-                         foreach (var record in fileRecordsPricing)
-                             swPricing.WriteLine(record.ToFormatFlatFile());
-                         swPricing.Close();
-
-                         TextProgressBar.Text = "Successed";
-                             SendEmail.Email("Bonjour");
+                    ExcelLibrary.DataSetHelper.CreateWorkbook(@"MyExcelFile" + DateTime.Now.ToString("MM-dd-yyyy-HH-mm") + ".xls", ds);
                 }
             }
             catch (Exception ex)
@@ -213,31 +165,116 @@ namespace MWSAPP
 
         private void UploadInventory_Click(object sender, RoutedEventArgs e)
         {
-            //display message 
-            TextProgressBar.Text = "start";
-            // Create OpenFileDialog 
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            // Set filter for file extension and default file extension 
-            openFileDialog.DefaultExt = ".xml";
-            openFileDialog.Filter = "xml Files|*.xml";
-            // Display OpenFileDialog by calling ShowDialog method 
-            Nullable<bool> result = openFileDialog.ShowDialog();
-
-            // Get the selected file name and display in a TextBox 
-            if (result == true)
+            try
             {
-                TextProgressBar.Text = "Open Document ";
-                myProgressBar.Visibility = Visibility.Visible;
-                TextProgressBar.Visibility = Visibility.Visible;
+                //display message 
+                TextProgressBar.Text = "start";
+                // Create OpenFileDialog 
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                // Set filter for file extension and default file extension 
+                openFileDialog.DefaultExt = ".xml";
+                openFileDialog.Filter = "xml Files|*.xml";
+                // Display OpenFileDialog by calling ShowDialog method 
+                Nullable<bool> result = openFileDialog.ShowDialog();
 
-                // Open document 
-                string filename = openFileDialog.FileName;
-                //Create dataSet
-                TextProgressBar.Text = "Read DATA";
+                // Get the selected file name and display in a TextBox 
+                if (result == true)
+                {
+                    TextProgressBar.Text = "Open Document ";
+                    myProgressBar.Visibility = Visibility.Visible;
+                    TextProgressBar.Visibility = Visibility.Visible;
 
-                DataSet ds = XMLtoDataTable.ImportExcelXML(filename, true, true);
+                    // Open document 
+                    string filename = openFileDialog.FileName;
+                    //Create dataSet
+                    TextProgressBar.Text = "Read DATA";
+
+                    DataSet ds = XMLtoDataTable.ImportExcelXML(filename, true, true);
+
+                    int[,] arrTarifs = new int[,] { { 0, 2 }, { 2, 5 }, { 5, 10 }, { 10, 25 }, { 25, 50 }, { 50, 100 } };
+                    decimal tva = 0.22M;
+                    decimal amazonComission = 0.1552M;
+
+
+                    //create Input object
+                    IList<InputRecordInventory> RecordInventory = DataTableToDataExport.DataTableToInputRecordInventory(ds);
+                    IList<InputRecordPricing> RecordRecordPricing = DataTableToDataExport.DataTableToInputRecordPricing(ds);
+
+                    IList<FileRecordInventory> fileRecordsInventory = new List<FileRecordInventory>();
+                    IList<FileRecordPricing> fileRecordsPricing = new List<FileRecordPricing>();
+                    TextProgressBar.Text = "Create Records";
+                    foreach (InputRecordInventory input in RecordInventory)
+                    {
+                        FileRecordPricing frp = new();
+                        FileRecordInventory fri = new();
+                        decimal tarif = Tarif.CountIntervals(arrTarifs, input.Poids, 6);
+                        fri.ProductId = input.Alias;
+                        fri.Price = tarif + (1 + amazonComission) * input.Price + (1 + TVAValue.Text) * input.Price;
+                        fileRecordsPricing.Add(frp);
+                        fileRecordsInventory.Add(fri);
+                    }
+                    string path = Directory.GetCurrentDirectory();
+                    TextProgressBar.Text = "Create Flat Files";
+
+                    string fileNameInventoryLoader = @"Flat.File.InventoryLoader.txt";
+                    string fileNameAutomatePricing = @"Flat.File.AutomatePricing.txt";
+                    if (File.Exists(fileNameInventoryLoader))
+                    {
+                        File.Delete(fileNameInventoryLoader);
+                    }
+                    //Pass the filepath and filename to the StreamWriter Constructor
+                    StreamWriter swInventoryLoader = new StreamWriter(fileNameInventoryLoader);
+                    //Write a line of text
+                    swInventoryLoader.WriteLine("sku	product-id	product-id-type	price	minimum-seller-allowed-price	maximum-seller-allowed-price	item-condition	quantity	add-delete	item-note	expedited-shipping  product_tax_code    handling-time");
+                    //Close the file
+                    foreach (FileRecordInventory record in fileRecordsInventory)
+                    {
+                        swInventoryLoader.WriteLine(record.ToFormatFlatFile());
+                    }
+
+                    swInventoryLoader.Close();
+
+                    if (File.Exists(fileNameAutomatePricing))
+                    {
+                        File.Delete(fileNameAutomatePricing);
+                    }
+                    //Pass the filepath and filename to the StreamWriter Constructor
+                    StreamWriter swPricing = new StreamWriter(fileNameAutomatePricing);
+                    //Write a line of text
+                    swPricing.WriteLine("sku	minimum-seller-allowed-price	maximum-seller-allowed-price	country-code	currency-code	rule-name	rule-action	business-rule-name	business-rule-action");
+                    //Close the file
+                    foreach (var record in fileRecordsPricing)
+                        swPricing.WriteLine(record.ToFormatFlatFile());
+                    swPricing.Close();
+
+                    TextProgressBar.Text = "Successed";
+                 //   SendEmail.Email("Bonjour");
+                }
             }
+            catch (Exception ex)
+            {
+                TextErrorProgressBar.Visibility = Visibility.Visible;
+                TextProgressBar.Text = "Failed";
+                TextErrorProgressBar.Text = ex.Message;
 
             }
+                   
+
+        }
+
+        private void Generate_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void TVAValue_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+        private void PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[0-9]{1,2}.[0-9]+$");
+            e.Handled = regex.IsMatch(e.Text);
+        }
     }
 }

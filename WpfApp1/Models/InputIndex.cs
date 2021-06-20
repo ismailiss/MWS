@@ -11,6 +11,12 @@ namespace MWSAPP.Models
         public int AliasIndex { get; set; }
 
         public int CodiceIndex { get; set; }
+
+        public int PoidsIndex { get; set; }
+
+        public int PriceIndex { get; set; }
+
+
     }
 }
   

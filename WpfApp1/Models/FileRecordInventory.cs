@@ -23,7 +23,7 @@ namespace MWSAPP.Models
 
         public int ItemCondition { get; set; } = 11;
 
-        public int Quantity { get; set; } = 0;
+        public int Quantity { get; set; }
 
         public string AddDelete{ get;set; } = "a";
 

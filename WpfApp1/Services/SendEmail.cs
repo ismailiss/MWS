@@ -14,10 +14,10 @@ namespace MWSAPP.Services
         {
             try
             {
-                MailMessage message = new MailMessage();
-                SmtpClient smtp = new SmtpClient();
-                message.From = new MailAddress("ismailelaissaoui1@gmail.com");
-                message.To.Add(new MailAddress("ismailelaissaoui@gmail.com"));
+                MailMessage message = new ();
+                SmtpClient smtp = new ();
+                message.From = new ("ismailelaissa.com");
+                message.To.Add(new ("ismailela.com"));
                 message.Subject = "Test";
                 message.IsBodyHtml = true; //to make message body as html  
                 message.Body = htmlString;
@@ -25,7 +25,7 @@ namespace MWSAPP.Services
                 smtp.Host = "smtp.gmail.com"; //for gmail host  
                 smtp.EnableSsl = true;
                 smtp.UseDefaultCredentials = false;
-                smtp.Credentials = new NetworkCredential("ismailelaissaoui1@gmail.com", "ismail10000");
+                smtp.Credentials = new NetworkCredential("", "");
                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
                 smtp.Send(message);
             }
