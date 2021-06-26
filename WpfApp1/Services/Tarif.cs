@@ -8,8 +8,10 @@ namespace MWSAPP.Services
 {
     public static class Tarif
     {
-        public static decimal CountIntervals(int[,] arr, decimal V, int N)
+        public static decimal CountIntervals( decimal V, int N)
         {
+            int[,] arr = new int[,] { { 0, 2 }, { 2, 5 }, { 5, 10 }, { 10, 25 }, { 25, 50 }, { 50, 100 } };
+
             // Variable to store the count of intervals
             int count = 0;
             decimal tarif = 0;

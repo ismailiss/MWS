@@ -13,55 +13,106 @@ namespace MWSAPP.Services
 {
     public static class DataTableToDataExport
     {
-        private static int getInputIndex(DataColumnCollection Columns,string header)
+        public static InputIndex getInputIndexd(DataColumnCollection Columns,
+            IList<string> aliasLabel, IList<string> codiceLabels, IList<string> priceLabels, IList<string> poidsLabels
+            , IList<string> COPRELabels, IList<string> SITEALabels, IList<string> MarchioLabels, IList<string> skuLabels)
         {
             InputIndex inputIndex = new();
+            var indexAlias = Columns.Cast<DataColumn>().Select((c, i) => new { c.ColumnName, i }).Where(c => aliasLabel.Contains(c.ColumnName)).FirstOrDefault();
+            if (indexAlias!=null)
+            {
+                inputIndex.AliasIndex = indexAlias.i;
+            } 
+
+            var indexCodice = Columns.Cast<DataColumn>().Select((c, i) => new { c.ColumnName, i }).Where(c => codiceLabels.Contains(c.ColumnName)).FirstOrDefault();
+            if (indexCodice != null)
+            {
+                inputIndex.CodiceIndex = indexCodice.i;
+            }
+            var indexprice = Columns.Cast<DataColumn>().Select((c, i) => new { c.ColumnName, i }).Where(c => priceLabels.Contains(c.ColumnName)).FirstOrDefault();
+            if (indexprice!=null)
+            {
+                inputIndex.PriceIndex = indexprice.i;
+
+            }
+
+            var indexpoids = Columns.Cast<DataColumn>().Select((c, i) => new { c.ColumnName, i }).Where(c => poidsLabels.Contains(c.ColumnName)).FirstOrDefault();
+            if(indexpoids != null) inputIndex.PoidsIndex = indexpoids.i;
+
+            var indexCOPRE = Columns.Cast<DataColumn>().Select((c, i) => new { c.ColumnName, i }).Where(c => COPRELabels.Contains(c.ColumnName)).FirstOrDefault();
+            if (indexCOPRE != null)
+            {
+                inputIndex.COPREIndex = indexCOPRE.i;
+
+            }
+
+            var indexSTEA = Columns.Cast<DataColumn>().Select((c, i) => new { c.ColumnName, i }).Where(c => SITEALabels.Contains(c.ColumnName)).FirstOrDefault();
+            if (indexSTEA != null)
+            {
+                inputIndex.SITEAIndex = indexSTEA.i;
+
+            }
+            var indexMarchio = Columns.Cast<DataColumn>().Select((c, i) => new { c.ColumnName, i }).Where(c => MarchioLabels.Contains(c.ColumnName)).FirstOrDefault();
+            if (indexMarchio != null)
+            {
+                inputIndex.MarchioIndex = indexMarchio.i;
+
+            }
+            var indexSKU = Columns.Cast<DataColumn>().Select((c, i) => new { c.ColumnName, i }).Where(c => skuLabels.Contains(c.ColumnName)).FirstOrDefault();
+            if (indexSKU != null)
+            {
+                inputIndex.SkuIndex = indexSKU.i;
+
+            }
+            return inputIndex;
+        }
+        private static int getInputIndex(DataColumnCollection Columns,IList<string> headerLabels)
+        {
+            
             var indiceAlias = Columns.Cast<DataColumn>().
-              Select((c,i) => new { c.ColumnName,i }).Where(c => c.ColumnName == header).FirstOrDefault();
+              Select((c,i) => new { c.ColumnName,i }).Where(c => headerLabels.Contains(c.ColumnName)).FirstOrDefault();
             return indiceAlias.i;
         }
-        public static IList<InputRecordInventory> DataTableToInputRecordInventory(DataSet ds)
+        public static IList<InputRecordInventory> DataTableToInputRecordInventory(DataSet ds, InputIndex inputIndex, DataSet dsPoids, InputIndex inputIndexPoids)
         {
             IList<InputRecordInventory> inputs = new List<InputRecordInventory>();
-            InputIndex inputIndex = new();
-            inputIndex.AliasIndex = getInputIndex(ds.Tables[0].Columns,"Alias");
-            inputIndex.PoidsIndex = getInputIndex(ds.Tables[0].Columns, "Poids");
-            inputIndex.PriceIndex = getInputIndex(ds.Tables[0].Columns, "Prezzo");
-
             foreach (DataRow r in ds.Tables[0].Rows.Cast<DataRow>())
             {
+                decimal poids=15M;
+                foreach (DataRow rPoids in dsPoids.Tables[0].Rows.Cast<DataRow>())
+                {
+                    if (r["SKU"].ToString() == rPoids["SKU"].ToString())   
+                    {
+                        if(inputIndex.PoidsIndex.HasValue)
+                        poids = (decimal)r.ItemArray[inputIndexPoids.PoidsIndex.Value];
+                        goto AfterLoop;
+
+                    }
+                }
+            AfterLoop:
                 inputs.Add(new InputRecordInventory() {
-                    Codice = 0, 
-                    Alias = (decimal)r.ItemArray[inputIndex.AliasIndex],
-                    Poids= (decimal)r.ItemArray[inputIndex.PoidsIndex],
-                    Price = (decimal)r.ItemArray[inputIndex.PriceIndex]
+                    SKU = r["SKU"].ToString(),
+                    Alias = (decimal)r.ItemArray[inputIndex.AliasIndex.Value],
+                    Poids= poids,
+                    Price = (decimal)r.ItemArray[inputIndex.PriceIndex.Value]
 
                 });
             }
             return inputs;
         }
-        public static IList<InputRecordPricing> DataTableToInputRecordPricing(DataSet ds)
+        public static IList<InputRecordPricing> DataTableToInputRecordPricing(DataSet ds, InputIndex inputIndex)
         {
             IList<InputRecordPricing> inputs = new List<InputRecordPricing>();
-            InputIndex inputIndex = new();
-            inputIndex.AliasIndex = getInputIndex(ds.Tables[0].Columns, "Alias");
 
             foreach (DataRow r in ds.Tables[0].Rows.Cast<DataRow>())
             {
                 inputs.Add(new InputRecordPricing()
                 {
-                    Codice = 0,
-                    Alias = (decimal)r.ItemArray[inputIndex.AliasIndex],
+                    SKU = r["SKU"].ToString(),
+                    Alias = (decimal)r.ItemArray[inputIndex.AliasIndex.Value],
                 });
             }
             return inputs;
         }
-
-
-
-
-
-
-
     }
 }

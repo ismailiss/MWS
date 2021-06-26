@@ -8,9 +8,11 @@ namespace MWSAPP.Models
 {
     public class InputRecordInventory
     {
+        public string SKU { get; set; }
+
         public decimal Alias { get; set; }
 
-        public uint Codice { get; set; }
+        public decimal Codice { get; set; }
 
         public decimal Poids { get; set; }
 
@@ -20,6 +22,8 @@ namespace MWSAPP.Models
     }
     public class InputRecordPricing
     {
+        public string SKU  { get; set; }
+
         public decimal Alias { get; set; }
 
         public uint Codice { get; set; }

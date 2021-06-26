@@ -8,24 +8,29 @@ using System.Threading.Tasks;
 
 namespace MWSAPP.Services
 {
-    public static class SendEmail
+    public static class EmailSender
     {
-        public static void Email(string htmlString)
+        public static void SendEmail(List<string> emails,string body,string filePricing, string fileInventory)
         {
             try
             {
                 MailMessage message = new ();
                 SmtpClient smtp = new ();
-                message.From = new ("ismailelaissa.com");
-                message.To.Add(new ("ismailela.com"));
+                message.From = new ("Postmaster@ecomera.it");
+                foreach(string email in emails)
+                {
+                    message.To.Add(email);
+                }
                 message.Subject = "Test";
                 message.IsBodyHtml = true; //to make message body as html  
-                message.Body = htmlString;
+                message.Body = body;
                 smtp.Port = 587;
                 smtp.Host = "smtp.gmail.com"; //for gmail host  
+                message.Attachments.Add(new Attachment(filePricing));
+                message.Attachments.Add(new Attachment(fileInventory));
                 smtp.EnableSsl = true;
                 smtp.UseDefaultCredentials = false;
-                smtp.Credentials = new NetworkCredential("", "");
+                smtp.Credentials = new NetworkCredential("Postmaster@ecomera.it", "SY[89@rzHB&$p");
                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
                 smtp.Send(message);
             }

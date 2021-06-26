@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,9 +40,9 @@ namespace MWSAPP.Models
 
         public string ToFormatFlatFile()
         {
-            string priceString = Price.HasValue ? Price.Value.ToString("0,##") : "";
+            string priceString = Price.HasValue ? Price.Value.ToString("F", CultureInfo.InvariantCulture) : "";
         
-            string format = $"{SKU }\t{ProductId}{ProductIdType}\t {priceString}" +
+            string format = $"{SKU}\t{ProductId}{ProductIdType}\t {priceString}" +
                             $"\t{MinSellerAllowedPrice }\t{MaxSellerAllowedPrice}\t{ItemCondition}\t" +
                             $"{Quantity}\t{AddDelete }\t{ItemNote }\t{ExpeditedShipping }\t{Product_tax_code}" +
                             $"\t{ HandlingTime }";
