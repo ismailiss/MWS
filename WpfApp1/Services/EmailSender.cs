@@ -30,7 +30,7 @@ namespace MWSAPP.Services
                 message.Attachments.Add(new Attachment(fileInventory));
                 smtp.EnableSsl = true;
                 smtp.UseDefaultCredentials = false;
-                smtp.Credentials = new NetworkCredential("Postmaster@ecomera.it", "SY[89@rzHB&$p");
+                smtp.Credentials = new NetworkCredential("", "");
                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
                 smtp.Send(message);
             }

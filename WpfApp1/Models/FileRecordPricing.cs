@@ -18,7 +18,7 @@ namespace MWSAPP.Models
 
         public string CurrencyCode { get; set; } = "EUR";
 
-        public string RuleName { get; set; } = "Down";
+        public string RuleName { get; set; } = "MyRule";
 
         public string RuleAction { get; set; } = "START";
 
@@ -29,8 +29,12 @@ namespace MWSAPP.Models
 
         public string ToFormatFlatFile()
         {
-            return SKU + "\t"+ MinSellerAllowedPrice
-                 + "\t" + MaxSellerAllowedPrice + "\t" + CountryCode + "\t" + CurrencyCode
+            string MinSellerAllowedPriceString = MinSellerAllowedPrice.HasValue ?
+           MinSellerAllowedPrice.Value.ToString("0.00").Replace('.', ',') : "";
+            string MaxSellerAllowedPriceString = MaxSellerAllowedPrice.HasValue ? MaxSellerAllowedPrice.Value.ToString("0.00").Replace('.', ',') : "";
+
+            return SKU + "\t"+ MinSellerAllowedPriceString
+                 + "\t" + MaxSellerAllowedPriceString + "\t" + CountryCode + "\t" + CurrencyCode
                   + "\t" + RuleName + "\t" + RuleAction + "\t" + BusinessRuleName + 
                   "\t" + BusinessRuleAction;
         }

@@ -11,16 +11,16 @@ namespace MWSAPP.Models
     {
         public string SKU { get; set; }
 
-        public decimal? ProductId { get; set; } 
+        public string ProductId { get; set; } 
 
-        public int? ProductIdType { get; set; }
+        public int ProductIdType { get; set; }
 
         public decimal? Price { get; set; }
 
 
-        public string MinSellerAllowedPrice { get; set; } = "EUR";
+        public decimal? MinSellerAllowedPrice { get; set; } 
 
-        public string MaxSellerAllowedPrice { get; set; } = "Down";
+        public decimal? MaxSellerAllowedPrice { get; set; } 
 
         public int ItemCondition { get; set; } = 11;
 
@@ -28,7 +28,7 @@ namespace MWSAPP.Models
 
         public string AddDelete{ get;set; } = "a";
 
-        public string ItemNote { get; set; } = "a";
+        public string ItemNote { get; set; } = "";
 
         public string ExpeditedShipping { get; set; } = "";
 
@@ -40,10 +40,14 @@ namespace MWSAPP.Models
 
         public string ToFormatFlatFile()
         {
-            string priceString = Price.HasValue ? Price.Value.ToString("F", CultureInfo.InvariantCulture) : "";
-        
-            string format = $"{SKU}\t{ProductId}{ProductIdType}\t {priceString}" +
-                            $"\t{MinSellerAllowedPrice }\t{MaxSellerAllowedPrice}\t{ItemCondition}\t" +
+
+            string priceString = Price.HasValue ? Price.Value.ToString("0.00").Replace('.', ',') : "";
+            string MinSellerAllowedPriceString = MinSellerAllowedPrice.HasValue ?
+                MinSellerAllowedPrice.Value.ToString("0.00").Replace('.', ',') : "";
+            string MaxSellerAllowedPriceString = MaxSellerAllowedPrice.HasValue ? MaxSellerAllowedPrice.Value.ToString("0.00").Replace('.', ',') : "";
+
+            string format = $"{SKU}\t{ProductId}\t{ProductIdType}\t {priceString}" +
+                            $"\t{MinSellerAllowedPriceString }\t{MaxSellerAllowedPriceString}\t{ItemCondition}\t" +
                             $"{Quantity}\t{AddDelete }\t{ItemNote }\t{ExpeditedShipping }\t{Product_tax_code}" +
                             $"\t{ HandlingTime }";
             return format;

@@ -22,6 +22,7 @@ using MWSAPP.Models;
 using MWSAPP.Services;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace MWSAPP
 {
@@ -98,54 +99,52 @@ namespace MWSAPP
                 TextProgressBar.Text = "Generate file step 1";
                 TextErrorProgressBar.Visibility = Visibility.Hidden;
                 DataTable dt = dsStep1.Tables[0];
-                if (! dt.Columns.Contains("SKU"))
+                if (! dt.Columns.Contains("SKU") && !dt.Columns.Contains("Quantity"))
                 {
                     dt.Columns.Add("SKU", typeof(string));
-                }
-
-                if (!dt.Columns.Contains("Quantity"))
-                {
                     dt.Columns.Add("Quantity", typeof(int));
-                }
 
-                InputIndex inputIndex = new();
-                //create Input object
-                IList<string> aliasLabel = AliasInput.Text.Split(',');
-                IList<string> codiceLabels = CodiceInput.Text.Split(',');
-                IList<string> priceLabels = PriceInput.Text.Split(',');
-                IList<string> poidsLabels = PoidsInput.Text.Split(',');
-                IList<string> copreLabels = COPREInput.Text.Split(',');
-                IList<string> siteaLabels = SITEAInput.Text.Split(',');
-                IList<string> marchioLabels = MarchioInput.Text.Split(',');
+                    InputIndex inputIndex = new();
+                    //create Input object
+                    IList<string> aliasLabel = AliasInput.Text.Split(',');
+                    IList<string> codiceLabels = CodiceInput.Text.Split(',');
+                    IList<string> priceLabels = PriceInput.Text.Split(',');
+                    IList<string> poidsLabels = PoidsInput.Text.Split(',');
+                    IList<string> copreLabels = COPREInput.Text.Split(',');
+                    IList<string> siteaLabels = SITEAInput.Text.Split(',');
+                    IList<string> marchioLabels = MarchioInput.Text.Split(',');
 
-                inputIndex = DataTableToDataExport.getInputIndexd(dt.Columns, aliasLabel, codiceLabels, priceLabels, poidsLabels
-                                                 , copreLabels, siteaLabels, marchioLabels,new List<string>());
-                int rowsCount = dt.Rows.Count;
-                for (int i = 0; i < rowsCount; i++)
-                {
-                    dt.Rows[i]["SKU"] = FormatString.FormatSKU(dt.Rows[i], "FOR", inputIndex); ;
-                    dt.Rows[i]["Quantity"] = dt.Rows[i][inputIndex.COPREIndex.Value];
-                    if (int.Parse(dt.Rows[i]["SITEA"].ToString()) > 0)
+                    inputIndex = DataTableToDataExport.getInputIndexd(dt.Columns, aliasLabel, codiceLabels, priceLabels, poidsLabels
+                                                     , copreLabels, siteaLabels, marchioLabels, new List<string>());
+                    int rowsCount = dt.Rows.Count;
+                    for (int i = 0; i < rowsCount; i++)
                     {
-                        string skuSITEA = FormatString.FormatSKU(dt.Rows[i], "SITEA", inputIndex); ;
-
-                        DataRow dr = dt.NewRow();
-                        for (int j = 0; j < dt.Columns.Count - 2; j++)
+                        dt.Rows[i]["SKU"] = FormatString.FormatSKU(dt.Rows[i], "FOR", inputIndex); ;
+                        dt.Rows[i]["Quantity"] = dt.Rows[i][inputIndex.COPREIndex.Value];
+                        if (int.Parse(dt.Rows[i]["SITEA"].ToString()) > 0)
                         {
-                            dr[j] = dt.Rows[i][j];
+                            string skuSITEA = FormatString.FormatSKU(dt.Rows[i], "SITEA", inputIndex); 
+                            DataRow dr = dt.NewRow();
+                            for (int j = 0; j < dt.Columns.Count - 2; j++)
+                            {
+                                dr[j] = dt.Rows[i][j];
+                            }
+                            dr["SKU"] = skuSITEA;
+                            dr["Quantity"] = dt.Rows[i][inputIndex.SITEAIndex.Value];
+                            dsStep1.Tables[0].Rows.Add(dr);
                         }
-                        dr["SKU"] = skuSITEA;
-                        dr["Quantity"] = dt.Rows[i][inputIndex.SITEAIndex.Value];
-
-                        dsStep1.Tables[0].Rows.Add(dr);
                     }
                 }
-                string directory = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "MYFiles\\step1");
+
+                string directory = System.IO.Path.Combine("C:\\", "MWSFiles\\step1");
                 Directory.CreateDirectory(directory);
 
-                string filename = System.IO.Path.Combine(directory, "MyExcelFile" + DateTime.Now.ToString("-HH-mm-ss-dd-MM-yyyy") + ".xls");
-              
-                ExcelLibrary.DataSetHelper.CreateWorkbook(filename, dsStep1);
+                string filename = System.IO.Path.Combine(directory, "MyExcelFile" + DateTime.Now.ToString("-ddMMyyyy-HHmmss") + ".XLSX");
+                string filenameXml = System.IO.Path.Combine(directory, "MyExcelFile" + DateTime.Now.ToString("-ddMMyyyy-HHmmss") + ".xml");
+                SpreadsheetWorkbook.CreateSpreadsheetWorkbook(filename, dsStep1);
+                SpreadsheetWorkbook.CreateSpreadsheetWorkbook(filename, dsStep1);
+
+                //   ExcelLibrary.DataSetHelper.CreateWorkbook(filename, dsStep1);
                 TextProgressBar.Text = $"File Generated {filename}" ;
 
             }
@@ -154,7 +153,6 @@ namespace MWSAPP
                 TextErrorProgressBar.Visibility = Visibility.Hidden;
                 TextProgressBar.Visibility = Visibility.Visible;
                 TextErrorProgressBar.Visibility = Visibility.Visible;
-
                 TextProgressBar.Text = "Failed";
                 TextErrorProgressBar.Text = ex.Message;
             }
@@ -201,9 +199,10 @@ namespace MWSAPP
             }
             catch (Exception ex)
             {
-                TextErrorProgressBar.Text = "";
                 TextProgressBar.Text = "Failed";
                 MyProgressBar.Visibility = Visibility.Hidden;
+                TextErrorProgressBar.Visibility = Visibility.Hidden;
+
                 TextErrorProgressBar.Text = ex.Message;
             }
 
@@ -262,6 +261,8 @@ namespace MWSAPP
             {
                 TextProgressBar.Text = "Generate files step 2";
                 MyProgressBar.Visibility = Visibility.Visible;
+                CultureInfo provider;
+
                 //create Input object
                 InputIndex inputIndex = new();
                 InputIndex inputIndexpoids = new();
@@ -298,29 +299,43 @@ namespace MWSAPP
                 TextProgressBar.Text = "Create Records";
                 foreach (InputRecordInventory input in RecordInventory)
                 {
-                    FileRecordPricing frp = new();
-                    FileRecordInventory fri = new();
-                    decimal tarif = Tarif.CountIntervals(input.Poids, 6);
-                    fri.SKU = input.SKU;
-                    frp.SKU= input.SKU;
-                    fri.ProductId = input.Alias;
-                    fri.Price = input.Price+ tarif +  (decimal.Parse(AmazonComissionValue.Text) / 100) * input.Price +
-                        (decimal.Parse(TVAValue.Text) / 100) * input.Price;
+                        FileRecordPricing frp = new();
+                        FileRecordInventory fri = new();
+                        decimal tarif = Tarif.CountIntervals(input.Poids, 6);
+                        fri.SKU = input.SKU;
+                        frp.SKU= input.SKU;
+                        fri.ProductId = input.Alias;
+                        if (fri.Quantity == 0) fri.AddDelete = "d";
+                        if (input.Alias.Length < 13) fri.ProductIdType = 3;   
+                        else fri.ProductIdType = 3;
+                        string inputprice = input.Price.Replace(",",".") ;
+                        decimal temp;
+                        decimal? price = decimal.TryParse(inputprice, out temp) ? temp : (decimal?)null;
+                        price +=  tarif;
+                        price *= (1+ decimal.Parse(AmazonComissionValue.Text) / 100) ;
+                        price *= (1 + decimal.Parse(TVAValue.Text) / 100);
+                        fri.MinSellerAllowedPrice =price;
+                        fri.MaxSellerAllowedPrice = price*1.4M;
+                        fri.Price = price * 1.1M;
+
+                        frp.MinSellerAllowedPrice = price;
+                        frp.MaxSellerAllowedPrice = price * 1.4M;
+
                     fileRecordsPricing.Add(frp);
                     fileRecordsInventory.Add(fri);
                 }
                 TextProgressBar.Text = "Create Flat Files";
-                string directory = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "MYFiles\\step2");
-                Directory.CreateDirectory(directory);
+                    string directory = System.IO.Path.Combine("C:\\", "MWSFiles\\step2");
+                    Directory.CreateDirectory(directory);
 
-                fileNameInventoryLoader = System.IO.Path.Combine(directory, "Flat.File." + DateTime.Now.ToString("-HH-mm-ss-dd-MMyyyy") + "InventoryLoader.txt"); 
-                fileNameAutomatePricing = System.IO.Path.Combine(directory, "Flat.File." + DateTime.Now.ToString("-HH-mm-ss-dd-MMyyyy") + "AutomatePricing.txt"); 
+                fileNameInventoryLoader = System.IO.Path.Combine(directory, "Flat.File." + DateTime.Now.ToString("-ddMMyyyy-HHmmss") + "InventoryLoader.txt"); 
+                fileNameAutomatePricing = System.IO.Path.Combine(directory, "Flat.File." + DateTime.Now.ToString("-ddMMyyyy-HHmmss") + "AutomatePricing.txt"); 
                 TextProgressBar.Text = "Create Inventory Loader Flat File";
                
                 //Pass the filepath and filename to the StreamWriter Constructor
                 StreamWriter swInventoryLoader = new(fileNameInventoryLoader);
                 //Write a line of text
-                swInventoryLoader.WriteLine("sku    product-id	product-id-type	price	minimum-seller-allowed-price	maximum-seller-allowed-price	item-condition	quantity	add-delete	item-note	expedited-shipping  product_tax_code    handling-time");
+                swInventoryLoader.WriteLine("sku\tproduct-id\tproduct-id-type\tprice\tminimum-seller-allowed-price\tmaximum-seller-allowed-price\titem-condition\tquantity\tadd-delete\titem-note\texpedited-shipping\tproduct_tax_code\thandling-time");
                 //Close the file
                 foreach (FileRecordInventory record in fileRecordsInventory)
                 {
@@ -336,13 +351,13 @@ namespace MWSAPP
                 //Pass the filepath and filename to the StreamWriter Constructor
                 StreamWriter swPricing = new StreamWriter(fileNameAutomatePricing);
                 //Write a line of text
-                swPricing.WriteLine("sku	minimum-seller-allowed-price	maximum-seller-allowed-price	country-code	currency-code	rule-name	rule-action	business-rule-name	business-rule-action");
+                swPricing.WriteLine($"sku\tminimum-seller-allowed-price\tmaximum-seller-allowed-price\tcountry-code\tcurrency-code\trule-name\trule-action\tbusiness-rule-name\tbusiness-rule-action");
                 //Close the file
                 foreach (var record in fileRecordsPricing)
                     swPricing.WriteLine(record.ToFormatFlatFile());
                 swPricing.Close();
-
                 TextProgressBar.Text = "Files generated : " + fileNameInventoryLoader + ", " + fileNameAutomatePricing;
+                MyProgressBar.Visibility = Visibility.Hidden;
 
                 }
             }

@@ -92,9 +92,9 @@ namespace MWSAPP.Services
             AfterLoop:
                 inputs.Add(new InputRecordInventory() {
                     SKU = r["SKU"].ToString(),
-                    Alias = (decimal)r.ItemArray[inputIndex.AliasIndex.Value],
+                    Alias = (string)r.ItemArray[inputIndex.AliasIndex.Value],
                     Poids= poids,
-                    Price = (decimal)r.ItemArray[inputIndex.PriceIndex.Value]
+                    Price = (string)r.ItemArray[inputIndex.PriceIndex.Value]
 
                 });
             }
@@ -109,7 +109,7 @@ namespace MWSAPP.Services
                 inputs.Add(new InputRecordPricing()
                 {
                     SKU = r["SKU"].ToString(),
-                    Alias = (decimal)r.ItemArray[inputIndex.AliasIndex.Value],
+                    Alias = (string)r.ItemArray[inputIndex.AliasIndex.Value],
                 });
             }
             return inputs;

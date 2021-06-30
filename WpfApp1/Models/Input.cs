@@ -10,13 +10,13 @@ namespace MWSAPP.Models
     {
         public string SKU { get; set; }
 
-        public decimal Alias { get; set; }
+        public string Alias { get; set; }
 
-        public decimal Codice { get; set; }
+        public string Codice { get; set; }
 
         public decimal Poids { get; set; }
 
-        public decimal Price { get; set; }
+        public string Price { get; set; }
 
 
     }
@@ -24,7 +24,7 @@ namespace MWSAPP.Models
     {
         public string SKU  { get; set; }
 
-        public decimal Alias { get; set; }
+        public string Alias { get; set; }
 
         public uint Codice { get; set; }
 
