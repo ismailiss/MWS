@@ -24,6 +24,8 @@ namespace MWSAPP.Models
 
         public int? SkuIndex { get; set; }
 
+        public int? CodeAricleIndex { get; set; }
+
     }
 }
   

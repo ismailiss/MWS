@@ -16,18 +16,16 @@ namespace MWSAPP.Services
             {
                 MailMessage message = new ();
                 SmtpClient smtp = new ();
-                message.From = new ("Postmaster@ecomera.it");
+                message.From = new ("ismailelaissaoui1@gmail.com");
                 foreach(string email in emails)
                 {
-                    message.To.Add(email);
+                    message.To.Add("ismailelaissaoui1@gmail.com");
                 }
-                message.Subject = "Test";
+                message.Subject = "MWSAPP FILES";
                 message.IsBodyHtml = true; //to make message body as html  
                 message.Body = body;
                 smtp.Port = 587;
                 smtp.Host = "smtp.gmail.com"; //for gmail host  
-                message.Attachments.Add(new Attachment(filePricing));
-                message.Attachments.Add(new Attachment(fileInventory));
                 smtp.EnableSsl = true;
                 smtp.UseDefaultCredentials = false;
                 smtp.Credentials = new NetworkCredential("", "");

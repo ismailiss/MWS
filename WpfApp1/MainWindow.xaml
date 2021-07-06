@@ -17,17 +17,19 @@
                     <Label Content="write excel field : Price,Prezzo" HorizontalAlignment="Left" Margin="29,64,0,0" VerticalAlignment="Top" Width="191"/>
                     <Label x:Name="AliasLabel" Content="Alias :" HorizontalAlignment="Left" Margin="20,102,0,0" VerticalAlignment="Top" Height="25" Width="50"/>
                     <Label x:Name="Codicelabel" Content="Codice :" HorizontalAlignment="Left" Margin="211,102,0,0" VerticalAlignment="Top" Height="25"/>
-                    <TextBox x:Name="CodiceInput" HorizontalAlignment="Left" Margin="264,102,0,0" Text="Codice" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="25" />
+                    <TextBox x:Name="CodiceInput" HorizontalAlignment="Left" Margin="281,102,0,0" Text="Codice" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="25" />
                     <TextBox x:Name="PoidsInput" HorizontalAlignment="Left" Margin="80,130,0,0" Text="Poids,PESO" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="25" VerticalContentAlignment="Center"/>
-                    <TextBox x:Name="PriceInput" HorizontalAlignment="Left" Margin="264,130,0,0" Text="Price,Prezzo" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="25" VerticalContentAlignment="Center"/>
+                    <TextBox x:Name="PriceInput" HorizontalAlignment="Left" Margin="281,130,0,0" Text="Price,Prezzo" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="25" VerticalContentAlignment="Center"/>
                     <Label x:Name="PoidsValue" Content="Poids : " HorizontalAlignment="Left" Margin="20,130,0,0" VerticalAlignment="Top" Width="50" Height="26"/>
                     <Label x:Name="PriceLabel" Content="Price :" HorizontalAlignment="Left" Margin="209,130,0,0" VerticalAlignment="Top" Height="25" Width="50"/>
                     <TextBox x:Name="COPREInput" HorizontalAlignment="Left" Margin="80,160,0,0" Text="COPRE" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="26" VerticalContentAlignment="Center"/>
-                    <TextBox x:Name="SITEAInput" HorizontalAlignment="Left" Margin="264,162,0,0" Text="SITEA" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="26" VerticalContentAlignment="Center"/>
+                    <TextBox x:Name="SITEAInput" HorizontalAlignment="Left" Margin="281,162,0,0" Text="SITEA" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="26" VerticalContentAlignment="Center"/>
                     <Label x:Name="COPREValue" Content="COPRE :" HorizontalAlignment="Left" Margin="20,161,0,0" VerticalAlignment="Top" Width="51" Height="26"/>
                     <Label x:Name="SITEAValue" Content="SITEA :" HorizontalAlignment="Left" Margin="215,35,0,0" VerticalAlignment="Center" Height="26" Width="50"/>
                     <TextBox x:Name="MarchioInput" HorizontalAlignment="Left" Margin="80,189,0,0" Text="Marchio" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="26" VerticalContentAlignment="Center"/>
                     <Label x:Name="PoidsValue_Copy1" Content="Marchio : " HorizontalAlignment="Left" Margin="20,189,0,0" VerticalAlignment="Top" Width="58" Height="26" RenderTransformOrigin="0.19,1.349"/>
+                    <Label x:Name="CodeArticleValue" Content="Code Article :" HorizontalAlignment="Left" Margin="200,191,0,0" VerticalAlignment="Top" Height="26" Width="81"/>
+                    <TextBox x:Name="CodeArticleInput" HorizontalAlignment="Left" Margin="281,190,0,0" Text="CodeArticle" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="26" VerticalContentAlignment="Center"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Generate"  IsEnabled="False" Width="100">

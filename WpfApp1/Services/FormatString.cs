@@ -18,12 +18,18 @@ namespace MWSAPP.Services
   
         public static string FormatSKU(DataRow dtr, string prefix, InputIndex inputIndex)
         {
-            string sku = prefix + "-";
-            sku = (string)dtr[inputIndex.AliasIndex.Value] == ""? sku += "NO" : sku+=dtr[inputIndex.AliasIndex.Value].ToString();
-            sku += "-";
-            sku = (string)dtr[inputIndex.CodiceIndex.Value] == "" ? sku += "NO" : sku += dtr[inputIndex.CodiceIndex.Value].ToString();
-            sku += "-";
-            sku = (string)dtr[inputIndex.MarchioIndex.Value] == "" ? sku += "NO" : sku += dtr[inputIndex.MarchioIndex.Value];
+            string sku = prefix ;
+            sku = inputIndex.AliasIndex.HasValue == true && (string)dtr[inputIndex.CodeAricleIndex.Value].ToString() != ""?
+                sku += "-" + dtr[inputIndex.AliasIndex.Value].ToString()  : sku += "-NO";
+            
+            sku = inputIndex.CodiceIndex.HasValue == true && dtr[inputIndex.CodiceIndex.Value].ToString() != ""?
+                    sku += "-" + dtr[inputIndex.CodiceIndex.Value].ToString() : sku += "-NO";
+            
+            sku = inputIndex.MarchioIndex.HasValue == true && (string)dtr[inputIndex.MarchioIndex.Value] != "" ?
+                sku += "-" + dtr[inputIndex.MarchioIndex.Value]  : sku += "-NO";
+
+            sku = inputIndex.CodeAricleIndex.HasValue ==true && dtr[inputIndex.CodeAricleIndex.Value].ToString() != ""
+                ? sku += "-" + dtr[inputIndex.CodeAricleIndex.Value]: sku += "";
             sku = FormatString.RemoveSpecialCharacters(sku);
             sku = sku.Length < 40 ? sku : sku.Substring(0, 39);
             return sku;

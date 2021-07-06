@@ -16,6 +16,8 @@ namespace MWSAPP.Models
 
         public decimal Poids { get; set; }
 
+        public int Quantity { get; set; }
+
         public string Price { get; set; }
 
 

@@ -15,7 +15,8 @@ namespace MWSAPP.Services
     {
         public static InputIndex getInputIndexd(DataColumnCollection Columns,
             IList<string> aliasLabel, IList<string> codiceLabels, IList<string> priceLabels, IList<string> poidsLabels
-            , IList<string> COPRELabels, IList<string> SITEALabels, IList<string> MarchioLabels, IList<string> skuLabels)
+            , IList<string> COPRELabels, IList<string> SITEALabels, IList<string> MarchioLabels, IList<string> skuLabels, 
+            IList<string> codeArticleLabels)
         {
             InputIndex inputIndex = new();
             var indexAlias = Columns.Cast<DataColumn>().Select((c, i) => new { c.ColumnName, i }).Where(c => aliasLabel.Contains(c.ColumnName)).FirstOrDefault();
@@ -64,6 +65,12 @@ namespace MWSAPP.Services
                 inputIndex.SkuIndex = indexSKU.i;
 
             }
+            var indexCodeArticle = Columns.Cast<DataColumn>().Select((c, i) => new { c.ColumnName, i }).Where(c => codeArticleLabels.Contains(c.ColumnName)).FirstOrDefault();
+            if (indexCodeArticle != null)
+            {
+                inputIndex.CodeAricleIndex = indexCodeArticle.i;
+
+            }
             return inputIndex;
         }
         private static int getInputIndex(DataColumnCollection Columns,IList<string> headerLabels)
@@ -78,24 +85,30 @@ namespace MWSAPP.Services
             IList<InputRecordInventory> inputs = new List<InputRecordInventory>();
             foreach (DataRow r in ds.Tables[0].Rows.Cast<DataRow>())
             {
-                decimal poids=15M;
+                decimal poids=0M;
                 foreach (DataRow rPoids in dsPoids.Tables[0].Rows.Cast<DataRow>())
                 {
                     if (r["SKU"].ToString() == rPoids["SKU"].ToString())   
                     {
-                        if(inputIndex.PoidsIndex.HasValue)
-                        poids = (decimal)r.ItemArray[inputIndexPoids.PoidsIndex.Value];
-                        goto AfterLoop;
-
+                        if (inputIndex.PoidsIndex.HasValue && r.ItemArray[inputIndexPoids.PoidsIndex.Value].GetType() == typeof(string))
+                        { 
+                            poids = decimal.Parse((string)r.ItemArray[inputIndexPoids.PoidsIndex.Value]);
+                            goto AfterLoop;
+                        }
+                        else if (inputIndex.PoidsIndex.HasValue && r.ItemArray[inputIndexPoids.PoidsIndex.Value].GetType() == typeof(decimal))
+                        {
+                            poids = (decimal)r.ItemArray[inputIndexPoids.PoidsIndex.Value];
+                            goto AfterLoop;
+                        }
                     }
                 }
             AfterLoop:
                 inputs.Add(new InputRecordInventory() {
                     SKU = r["SKU"].ToString(),
+                    Quantity = int.Parse(r["Quantity"].ToString()),
                     Alias = (string)r.ItemArray[inputIndex.AliasIndex.Value],
                     Poids= poids,
                     Price = (string)r.ItemArray[inputIndex.PriceIndex.Value]
-
                 });
             }
             return inputs;

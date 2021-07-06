@@ -8,7 +8,7 @@ namespace MWSAPP.Services
 {
     public static class Tarif
     {
-        public static decimal CountIntervals( decimal V, int N)
+        public static decimal CountIntervals( decimal? V, int N)
         {
             int[,] arr = new int[,] { { 0, 2 }, { 2, 5 }, { 5, 10 }, { 10, 25 }, { 25, 50 }, { 50, 100 } };
 
@@ -46,13 +46,13 @@ namespace MWSAPP.Services
                     tarif = 28;
                     break;
                 case 5:
-                    tarif = 28;
+                    tarif = 33;
                     break;
                 case 6:
-                    tarif = 28;
+                    tarif = 60;
                     break;
                 default:
-                    tarif = 60;
+                    tarif = 10;
                     break;
             }
             return tarif;

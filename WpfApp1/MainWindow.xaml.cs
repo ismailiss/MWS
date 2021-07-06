@@ -113,9 +113,10 @@ namespace MWSAPP
                     IList<string> copreLabels = COPREInput.Text.Split(',');
                     IList<string> siteaLabels = SITEAInput.Text.Split(',');
                     IList<string> marchioLabels = MarchioInput.Text.Split(',');
+                    IList<string> codeArticleLabels = CodeArticleInput.Text.Split(',');
 
                     inputIndex = DataTableToDataExport.getInputIndexd(dt.Columns, aliasLabel, codiceLabels, priceLabels, poidsLabels
-                                                     , copreLabels, siteaLabels, marchioLabels, new List<string>());
+                                                     , copreLabels, siteaLabels, marchioLabels, new List<string>(), codeArticleLabels);
                     int rowsCount = dt.Rows.Count;
                     for (int i = 0; i < rowsCount; i++)
                     {
@@ -261,7 +262,6 @@ namespace MWSAPP
             {
                 TextProgressBar.Text = "Generate files step 2";
                 MyProgressBar.Visibility = Visibility.Visible;
-                CultureInfo provider;
 
                 //create Input object
                 InputIndex inputIndex = new();
@@ -274,14 +274,16 @@ namespace MWSAPP
                 IList<string> copreLabels = COPREInput.Text.Split(',');
                 IList<string> siteaLabels = SITEAInput.Text.Split(',');
                 IList<string> marchioLabels = MarchioInput.Text.Split(',');
+                IList<string> codeArticleLabels = CodeArticleInput.Text.Split(',');
+
                 IList<string> skuLabels = "SKU".Split(',');
 
 
                 inputIndex = DataTableToDataExport.getInputIndexd(dsStep2.Tables[0].Columns, aliasLabel, codiceLabels, priceLabels, poidsLabels
-                                                 , copreLabels, siteaLabels, marchioLabels, skuLabels);
+                                                 , copreLabels, siteaLabels, marchioLabels, skuLabels, codeArticleLabels);
 
                 inputIndexpoids = DataTableToDataExport.getInputIndexd(dsStep2Poids.Tables[0].Columns, aliasLabel, codiceLabels, priceLabels, poidsLabels
-                                                 , copreLabels, siteaLabels, marchioLabels, skuLabels);
+                                                 , copreLabels, siteaLabels, marchioLabels, skuLabels, codeArticleLabels) ;
                 if (inputIndexpoids==null || inputIndexpoids.PoidsIndex == null)
                 {
                     TextProgressBar.Text = "Poids not found";
@@ -305,6 +307,7 @@ namespace MWSAPP
                         fri.SKU = input.SKU;
                         frp.SKU= input.SKU;
                         fri.ProductId = input.Alias;
+                        fri.Quantity = input.Quantity;
                         if (fri.Quantity == 0) fri.AddDelete = "d";
                         if (input.Alias.Length < 13) fri.ProductIdType = 3;   
                         else fri.ProductIdType = 3;
@@ -316,7 +319,7 @@ namespace MWSAPP
                         price *= (1 + decimal.Parse(TVAValue.Text) / 100);
                         fri.MinSellerAllowedPrice =price;
                         fri.MaxSellerAllowedPrice = price*1.4M;
-                        fri.Price = price * 1.1M;
+                        fri.Price = price * 1.08M;
 
                         frp.MinSellerAllowedPrice = price;
                         frp.MaxSellerAllowedPrice = price * 1.4M;
